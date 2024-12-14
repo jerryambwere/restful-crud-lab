@@ -18,7 +18,6 @@ api = Api(app)
 
 
 class Plants(Resource):
-
     def get(self):
         plants = [plant.to_dict() for plant in Plant.query.all()]
         return make_response(jsonify(plants), 200)
@@ -61,23 +60,24 @@ class PlantByID(Resource):
         db.session.commit()
 
         return make_response(jsonify(plant.to_dict()), 200)
-def delete(self, id):
-    # Retrieve the plant record by ID
-    plant = db.session.get(Plant, id)
-    
-    # Check if the plant exists
-    if not plant:
-        return make_response(jsonify({'error': 'Plant not found'}), 404)
-    
-    # Delete the plant record
-    db.session.delete(plant)
-    db.session.commit()
-    
-    # Return a success response
-    return make_response(jsonify({'message': 'Success'}), 200)
+
+    def delete(self, id):
+        # Retrieve the plant record by ID
+        plant = db.session.get(Plant, id)
+        
+        # Check if the plant exists
+        if not plant:
+            return make_response(jsonify({'error': 'Plant not found'}), 404)
+        
+        # Delete the plant record
+        db.session.delete(plant)
+        db.session.commit()
+        
+        # Return a success response with 204 No Content
+        return '', 204
+
 
 api.add_resource(PlantByID, '/plants/<int:id>')
-
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
